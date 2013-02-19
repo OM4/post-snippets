@@ -118,6 +118,7 @@ Contributions are appreciated and encouraged.
 == Changelog ==
 
 = Version X.X - XX XX 201X =
+ * Variable default values now work correctly.
  * Allow other plugins or themes to disable the PHP Code execution feature using the new 'post_snippets_php_execution_enabled' filter.
  * Migrated to GitHub to maintain the code in development. [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
  * Included Polish translation (pl_PL) by Tomasz Wesołowski.
