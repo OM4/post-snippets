@@ -81,10 +81,24 @@ Example: `[shortcode]Some text[/shortcode]` the text within will be availble in
 a variable called content. So in your snippet use {content} to display it. Don't
 enter 'content' in the variable field, it's automatically assigned.
 
+= Where can I send bug reports? =
+
+Please visit the GitHub repository for [Post Snippet](https://github.com/artstorm/post-snippets)
+and open an [issue](https://github.com/artstorm/post-snippets/issues).
+Please create an issue that conforms with [necolas's guidelines](https://github.com/necolas/issue-guidelines).
+
 = Where can I get support? =
 
 Please visit the [Support Forum](http://wordpress.org/tags/post-snippets?forum_id=10 "Use this for support and feature requests") 
 for questions, answers, support and feature requests.
+
+= How can I contribute to the plugin? =
+
+If you want to contribute improved code or new features for the plugin. Please
+open a pull request at the [Post Snippets GitHub repository](https://github.com/artstorm/post-snippets).
+Please open a pull request that conforms with [necolas's guidelines](https://github.com/necolas/issue-guidelines).
+Contributions are appreciated and encouraged.
+
 
 == Screenshots ==
 
@@ -97,6 +111,7 @@ for questions, answers, support and feature requests.
 == Changelog ==
 
 = Version X.X - XX XX 201X =
+ * Migrated to GitHub to maintain the code in development. [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
  * Included Polish translation (pl_PL) by Tomasz Wesołowski.
  * Included Slovak translation (sk_SK) by Branco Radenovich.
 
