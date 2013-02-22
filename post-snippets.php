@@ -26,6 +26,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/** Load all of the necessary class files for the plugin */
+// spl_autoload_register('PostSnippets::autoload');
+
 /**
  * Base Class.
  */
@@ -44,9 +47,12 @@ class Post_Snippets_Base {
 }
 
 /**
- * Plugin Main Class.
+ * Init Singleton Class for Post Snippets.
+ *
+ * @package Post Snippets
+ * @author  Johan Steen <artstorm at gmail dot com>
  */
-class Post_Snippets extends Post_Snippets_Base
+class PostSnippets extends Post_Snippets_Base
 {
 	// Constants
 	const TINYMCE_PLUGIN_NAME = 'post_snippets';
@@ -665,7 +671,7 @@ function edOpenPostSnippets(myField) {
 	 */
 	private function get_FILE()
 	{
-		$dev_path = 'E:\Code\WordPress';
+		$dev_path = 'D:\Dropbox\Code\WordPress';
 		$result = strpos( __FILE__, $dev_path );
 
 		if ( $result === false ) {
@@ -728,7 +734,7 @@ if($test_post_snippets_host->passed) {
 		'plugins_loaded', 
 		create_function( 
 			'',
-			'global $post_snippets; $post_snippets = new Post_Snippets();'
+			'global $post_snippets; $post_snippets = new PostSnippets();'
 		)
 	);
 }
