@@ -537,9 +537,10 @@ function edOpenPostSnippets(myField) {
 					$vars = explode(",",$snippet['vars']);
 					$vars_str = '';
 					foreach ($vars as $var) {
-						$default_value = '';
-						list($variable_name,$default_value) = explode('=', $var);
-						$vars_str .= '"'.$variable_name.'" => "'.$default_value.'",';
+						$vars_str = $vars_str . '"'.$var.'" => "",';
+						// $default_value = '';
+						// list($variable_name,$default_value) = explode('=', $var);
+						// $vars_str .= '"'.$variable_name.'" => "'.$default_value.'",';
 					}
 
 					// Get the wptexturize setting
