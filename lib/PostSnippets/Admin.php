@@ -9,7 +9,7 @@
  * @author		Johan Steen <artstorm at gmail dot com>
  * @since		Post Snippets 1.8.8
  */
-class Post_Snippets_Settings extends Post_Snippets_Base
+class PostSnippets_Admin extends Post_Snippets_Base
 {
 	// -------------------------------------------------------------------------
 	// Handle form submissions
@@ -299,7 +299,7 @@ class Post_Snippets_Settings extends Post_Snippets_Base
 	 */
 	private function tab_tools()
 	{
-		$ie = new Post_Snippets_ImportExport();
+		$ie = new PostSnippets_ImportExport();
 
 		// Create header and export html form
 		printf( "<h3>%s</h3>", __( 'Import/Export', 'post-snippets' ));

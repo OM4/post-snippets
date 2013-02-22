@@ -8,7 +8,7 @@
  * @author		Johan Steen <artstorm at gmail dot com>
  * @since		Post Snippets 2.0
  */
-class Post_Snippets_ImportExport extends Post_Snippets_Base
+class PostSnippets_ImportExport extends Post_Snippets_Base
 {
 	/**
 	 * Export Snippets.
