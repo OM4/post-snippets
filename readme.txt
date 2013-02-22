@@ -121,9 +121,11 @@ Contributions are appreciated and encouraged.
 
 = Version 2.1 - 22 Feb 2013 =
  * Variable default values now work correctly.
- * Allow other plugins or themes to disable the PHP Code execution feature using the new 'post_snippets_php_execution_enabled' filter.
- * Refactored code to comply with the PSR-2 standard.
- * Migrated to GitHub to maintain the code in development. [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
+ * Allow other plugins or themes to disable the PHP Code execution feature using
+   the new 'post_snippets_php_execution_enabled' filter.
+ * Refactored code to comply with the PSR-0 standard.
+ * Migrated to GitHub to maintain the code in development. 
+   [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
  * Included Polish translation (pl_PL) by Tomasz Wesołowski.
  * Included Slovak translation (sk_SK) by Branco Radenovich.
 
