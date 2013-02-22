@@ -39,11 +39,11 @@ class Post_Snippets_Base {
 
 	static $php_execution_enabled;
 
-	public function __construct() {
+	// public function __construct() {
 		// Allow other plugins to disable the PHP Code execution feature.
 		// See http://wordpress.org/extend/plugins/post-snippets/faq/ for more details.
-		self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
-	}
+	// 	self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
+	// }
 }
 
 /**
@@ -54,13 +54,41 @@ class Post_Snippets_Base {
  */
 class PostSnippets extends Post_Snippets_Base
 {
+    private static $instance = false;
+
+    const MIN_PHP_VERSION  = '5.2.4';
+    const MIN_WP_VERSION   = '3.0';
+    const OPTION_DB_KEY    = 'post_snippets_options';
+
+
+
 	// Constants
 	const TINYMCE_PLUGIN_NAME = 'post_snippets';
 
 	// -------------------------------------------------------------------------
 
-	public function __construct() {
-		parent::__construct();
+    /**
+     * Singleton class
+     */
+    public static function getInstance()
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Constructor
+     * Initializes the plugin by setting localization, filters, and
+     * administration functions.
+     */
+	private function __construct() {
+        if (!$this->testHost()) {
+            return;
+        }
+
+		// parent::__construct();
 		// Define the domain and path for translations
 		$rel_path = dirname(plugin_basename($this->get_File())).'/languages/';
 		load_plugin_textdomain(	'post-snippets', false, $rel_path );
@@ -712,100 +740,72 @@ function edOpenPostSnippets(myField) {
 		}
 		return $snippet;
 	}
+
+    // -------------------------------------------------------------------------
+    // Environment Checks
+    // -------------------------------------------------------------------------
+
+    /**
+     * Checks PHP and WordPress versions.
+     */
+    private function testHost()
+    {
+        // Check if PHP is too old
+        if (version_compare(PHP_VERSION, self::MIN_PHP_VERSION, '<')) {
+            // Display notice
+            add_action( 'admin_notices', array(&$this, 'phpVersionError') );
+            return false;
+        }
+
+        // Check if WordPress is too old
+        global $wp_version;
+        if (version_compare($wp_version, self::MIN_WP_VERSION, '<')) {
+            add_action( 'admin_notices', array(&$this, 'wpVersionError') );
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Displays a warning when installed on an old PHP version.
+     */
+    public function phpVersionError()
+    {
+        echo '<div class="error"><p><strong>';
+        printf(
+            'Error: Post Snippets requires PHP version %1$s or greater.<br/>'.
+            'Your installed PHP version: %2$s',
+            self::MIN_PHP_VERSION, PHP_VERSION);
+        echo '</strong></p></div>';
+    }
+
+    /**
+     * Displays a warning when installed in an old Wordpress version.
+     */
+    public function wpVersionError()
+    {
+        echo '<div class="error"><p><strong>';
+        printf(
+            'Error: Post Snippets requires WordPress version %s or greater.',
+            self::MIN_WP_VERSION );
+        echo '</strong></p></div>';
+    }
 }
 
+add_action('plugins_loaded', array('PostSnippets', 'getInstance'));
 
 // -----------------------------------------------------------------------------
 // Start the plugin
 // -----------------------------------------------------------------------------
 
-// Check the host environment
-$test_post_snippets_host = new Post_Snippets_Host_Environment();
-
-// If environment is up to date, start the plugin
-if($test_post_snippets_host->passed) {
-	// Load external classes
-	if (is_admin()) {
-		require plugin_dir_path(__FILE__).'classes/settings.php';
-		require plugin_dir_path(__FILE__).'classes/help.php';
-		require plugin_dir_path(__FILE__).'classes/import-export.php';
-	}
-
-	add_action(
-		'plugins_loaded', 
-		create_function( 
-			'',
-			'global $post_snippets; $post_snippets = new PostSnippets();'
-		)
-	);
+// Load external classes
+if (is_admin()) {
+	require plugin_dir_path(__FILE__).'classes/settings.php';
+	require plugin_dir_path(__FILE__).'classes/help.php';
+	require plugin_dir_path(__FILE__).'classes/import-export.php';
 }
 
 
-/**
- * Post Snippets Host Environment.
- *
- * Checks that the host environment fulfils the requirements of Post Snippets.
- * This class is designed to work with PHP versions below 5, to make sure it's
- * always executed.
- *
- * - PHP Version 5.2.4 is on par with the requirements for WordPress 3.3.
- *
- * @since	Post Snippets 1.8.8
- */
-class Post_Snippets_Host_Environment
-{
-	// Minimum versions required
-	var $MIN_PHP_VERSION	= '5.2.4';
-	var $MIN_WP_VERSION		= '3.0';
-	var $passed				= true;
-
-	/**
-	 * Constructor.
-	 *
-	 * Checks PHP and WordPress versions. If any check failes, a system notice
-	 * is added and $passed is set to fail, which can be checked before trying
-	 * to create the main class.
-	 */
-	function Post_Snippets_Host_Environment()
-	{
-		// Check if PHP is too old
-		if (version_compare(PHP_VERSION, $this->MIN_PHP_VERSION, '<')) {
-			// Display notice
-			add_action( 'admin_notices', array(&$this, 'php_version_error') );
-			$this->passed = false;
-		}
-
-		// Check if WordPress is too old
-		global $wp_version;
-		if ( version_compare($wp_version, $this->MIN_WP_VERSION, '<') ) {
-			add_action( 'admin_notices', array(&$this, 'wp_version_error') );
-			$this->passed = false;
-		}
-	}
-
-	/**
-	 * Displays a warning when installed on an old PHP version.
-	 */
-	function php_version_error() {
-		echo '<div class="error"><p><strong>';
-		printf(
-			'Error: Post Snippets requires PHP version %1$s or greater.<br/>'.
-			'Your installed PHP version: %2$s',
-			$this->MIN_PHP_VERSION, PHP_VERSION);
-		echo '</strong></p></div>';
-	}
-
-	/**
-	 * Displays a warning when installed in an old Wordpress version.
-	 */
-	function wp_version_error() {
-		echo '<div class="error"><p><strong>';
-		printf(
-			'Error: Post Snippets requires WordPress version %s or greater.',
-			$this->MIN_WP_VERSION );
-		echo '</strong></p></div>';
-	}
-}
 
 // -----------------------------------------------------------------------------
 // Helper functions

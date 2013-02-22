@@ -18,7 +18,7 @@ class Post_Snippets_Help extends Post_Snippets_Base
 	 */
 	public function __construct( $option_page )
 	{
-		parent::__construct();
+		// parent::__construct();
 		// If WordPress is 3.3 or higher, use the new Help API, otherwise call
 		// the old contextual help action.
 		global $wp_version;
