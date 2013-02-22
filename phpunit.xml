@@ -2,7 +2,7 @@
 <phpunit 
 	colors="true" 
 	stopOnFailure="false" 
-	bootstrap="tests/bootstrap.php">
+	bootstrap="unittest/bootstrap.php">
 	<testsuites>
 		<testsuite name="complete">
 			<file>unittest</file>
