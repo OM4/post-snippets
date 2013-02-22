@@ -30,40 +30,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 spl_autoload_register('PostSnippets::autoload');
 
 /**
- * Base Class.
- */
-class Post_Snippets_Base {
-	// Constants
-	const PLUGIN_OPTION_KEY = 'post_snippets_options';
-	const USER_OPTION_KEY   = 'post_snippets';
-
-	static $php_execution_enabled;
-
-	// public function __construct() {
-		// Allow other plugins to disable the PHP Code execution feature.
-		// See http://wordpress.org/extend/plugins/post-snippets/faq/ for more details.
-	// 	self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
-	// }
-}
-
-/**
  * Init Singleton Class for Post Snippets.
  *
  * @package Post Snippets
  * @author  Johan Steen <artstorm at gmail dot com>
  */
-class PostSnippets extends Post_Snippets_Base
+class PostSnippets
 {
     private static $instance = false;
 
-    const MIN_PHP_VERSION  = '5.2.4';
-    const MIN_WP_VERSION   = '3.0';
-    const OPTION_DB_KEY    = 'post_snippets_options';
+    const MIN_PHP_VERSION = '5.2.4';
+    const MIN_WP_VERSION  = '3.0';
+    const OPTION_DB_KEY   = 'post_snippets_options';
+    const USER_META_KEY   = 'post_snippets';
+
+	static $php_execution_enabled;
 
 	// Constants
 	const TINYMCE_PLUGIN_NAME = 'post_snippets';
-
-	// -------------------------------------------------------------------------
 
     /**
      * Singleton class
@@ -77,16 +61,20 @@ class PostSnippets extends Post_Snippets_Base
     }
 
     /**
-     * Constructor
+     * Constructor.
      * Initializes the plugin by setting localization, filters, and
      * administration functions.
      */
-	private function __construct() {
+	private function __construct()
+	{
         if (!$this->testHost()) {
             return;
         }
 
-		// parent::__construct();
+		// Allow other plugins to disable the PHP Code execution feature.
+		// See http://wordpress.org/extend/plugins/post-snippets/faq/ for more details.
+		self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
+
 		// Define the domain and path for translations
 		$rel_path = dirname(plugin_basename($this->get_File())).'/languages/';
 		load_plugin_textdomain(	'post-snippets', false, $rel_path );
@@ -354,7 +342,7 @@ class PostSnippets extends Post_Snippets_Base
 		# Prepare the snippets and shortcodes into javascript variables
 		# so they can be inserted into the editor, and get the variables replaced
 		# with user defined strings.
-		$snippets = get_option( self::PLUGIN_OPTION_KEY );
+		$snippets = get_option( self::OPTION_DB_KEY );
 		foreach ($snippets as $key => $snippet) {
 			if ($snippet['shortcode']) {
 				# Build a long string of the variables, ie: varname1={varname1} varname2={varname2}
@@ -503,7 +491,7 @@ function edOpenPostSnippets(myField) {
 		echo "\t\t\t<ul>\n";
 
 		// Create a tab for each available snippet
-		$snippets = get_option( self::PLUGIN_OPTION_KEY );
+		$snippets = get_option( self::OPTION_DB_KEY );
 		foreach ($snippets as $key => $snippet) {
 			echo "\t\t\t\t";
 			echo "<li><a href=\"#ps-tabs-{$key}\">{$snippet['title']}</a></li>";
@@ -584,7 +572,7 @@ function edOpenPostSnippets(myField) {
 	 * Create the functions for shortcodes dynamically and register them
 	 */
 	function create_shortcodes() {
-		$snippets = get_option( self::PLUGIN_OPTION_KEY );
+		$snippets = get_option( self::OPTION_DB_KEY );
 		if (!empty($snippets)) {
 			foreach ($snippets as $snippet) {
 				// If shortcode is enabled for the snippet, and a snippet has been entered, register it as a shortcode.
@@ -674,8 +662,8 @@ function edOpenPostSnippets(myField) {
 		if ( current_user_can('manage_options') ) {
 			// If user can manage options, display the admin page
 			$option_page = add_options_page( 'Post Snippets Options', 'Post Snippets', 'administrator', $this->get_FILE(), array(&$this, 'options_page') );
-			if ( $option_page and class_exists('Post_Snippets_Help') ) {
-				$help = new Post_Snippets_Help( $option_page );
+			if ( $option_page and class_exists('PostSnippets_Help') ) {
+				$help = new PostSnippets_Help( $option_page );
 			}
 		} else {
 			// If user can't manage options, but can edit posts, display the overview page
@@ -693,7 +681,7 @@ function edOpenPostSnippets(myField) {
 	 */
 	public function overview_page()
 	{
-		$settings = new Post_Snippets_Settings();
+		$settings = new PostSnippets_Admin();
 		$settings->render( 'overview' );
 	}
 
@@ -704,7 +692,7 @@ function edOpenPostSnippets(myField) {
 	 */
 	public function options_page()
 	{
-		$settings = new Post_Snippets_Settings();
+		$settings = new PostSnippets_Admin();
 		$settings->render( 'options' );
 	}
 	
@@ -752,7 +740,7 @@ function edOpenPostSnippets(myField) {
 	 */
 	public function get_snippet( $snippet_name, $snippet_vars = '' )
 	{
-		$snippets = get_option( self::PLUGIN_OPTION_KEY );
+		$snippets = get_option( self::OPTION_DB_KEY );
 		for ($i = 0; $i < count($snippets); $i++) {
 			if ($snippets[$i]['title'] == $snippet_name) {
 				parse_str( htmlspecialchars_decode($snippet_vars), $snippet_output );
@@ -767,6 +755,16 @@ function edOpenPostSnippets(myField) {
 			}
 		}
 		return $snippet;
+	}
+
+	public static function optionDBKey()
+	{
+		return self::OPTION_DB_KEY;
+	}
+
+	public static function userMetaKey()
+	{
+		return self::USER_META_KEY;
 	}
 
     // -------------------------------------------------------------------------
@@ -821,19 +819,6 @@ function edOpenPostSnippets(myField) {
 }
 
 add_action('plugins_loaded', array('PostSnippets', 'getInstance'));
-
-// -----------------------------------------------------------------------------
-// Start the plugin
-// -----------------------------------------------------------------------------
-
-// Load external classes
-if (is_admin()) {
-	require plugin_dir_path(__FILE__).'classes/settings.php';
-	require plugin_dir_path(__FILE__).'classes/help.php';
-	require plugin_dir_path(__FILE__).'classes/import-export.php';
-}
-
-
 
 // -----------------------------------------------------------------------------
 // Helper functions

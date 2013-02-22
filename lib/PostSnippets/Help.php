@@ -8,7 +8,7 @@
  * @author		Johan Steen <artstorm at gmail dot com>
  * @since		Post Snippets 1.8.9
  */
-class PostSnippets_Help extends Post_Snippets_Base
+class PostSnippets_Help
 {
 	/**
 	 * Constructor.
@@ -47,7 +47,7 @@ class PostSnippets_Help extends Post_Snippets_Base
 			'title'   => __( 'Shortcode', 'post-snippets' ),
 			'content' => $this->help_shortcode()
 		) );
-		if ( self::$php_execution_enabled ) {
+		if ( PostSnippets::$php_execution_enabled ) {
 			$screen->add_help_tab( array(
 				'id'      => 'php-plugin-help',
 				'title'   => __( 'PHP', 'post-snippets' ),
