@@ -75,47 +75,8 @@ class PostSnippets
 		// See http://wordpress.org/extend/plugins/post-snippets/faq/ for more details.
 		self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
 
-		// Define the domain and path for translations
-		$rel_path = dirname(plugin_basename($this->get_File())).'/languages/';
-		load_plugin_textdomain(	'post-snippets', false, $rel_path );
-
-		$this->init_hooks();
-	}
-
-    /**
-     * PSR-0 compliant autoloader to load classes as needed.
-     *
-     * @since  2.1
-     *
-     * @param  string  $classname  The name of the class
-     * @return null    Return early if the class name does not start with the
-     *                 correct prefix
-     */
-    public static function autoload($className)
-    {
-        if ('PostSnippets' !== mb_substr($className, 0, 12)) {
-            return;
-        }
-        $className = ltrim($className, '\\');
-        $fileName  = '';
-        $namespace = '';
-        if ($lastNsPos = strrpos($className, '\\')) {
-            $namespace = substr($className, 0, $lastNsPos);
-            $className = substr($className, $lastNsPos + 1);
-            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
-            $fileName .= DIRECTORY_SEPARATOR;
-        }
-        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, 'lib_'.$className);
-        $fileName .='.php';
-
-        require $fileName;
-    }
-
-
-	/**
-	 * Initializes the hooks for the plugin
-	 */
-	function init_hooks() {
+        add_action('init', array($this, 'textDomain'));
+        register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
 
 		// Add TinyMCE button
 		add_action('init', array(&$this, 'add_tinymce_button') );
@@ -148,6 +109,70 @@ class PostSnippets
 		}
 	}
 
+    /**
+     * PSR-0 compliant autoloader to load classes as needed.
+     *
+     * @since  2.1
+     *
+     * @param  string  $classname  The name of the class
+     * @return null    Return early if the class name does not start with the
+     *                 correct prefix
+     */
+    public static function autoload($className)
+    {
+        if ('PostSnippets' !== mb_substr($className, 0, 12)) {
+            return;
+        }
+        $className = ltrim($className, '\\');
+        $fileName  = '';
+        $namespace = '';
+        if ($lastNsPos = strrpos($className, '\\')) {
+            $namespace = substr($className, 0, $lastNsPos);
+            $className = substr($className, $lastNsPos + 1);
+            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+            $fileName .= DIRECTORY_SEPARATOR;
+        }
+        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, 'lib_'.$className);
+        $fileName .='.php';
+
+        require $fileName;
+    }
+
+    /**
+     * Loads the text domain for translation
+     */
+    public function textDomain()
+    {
+        $domain = 'post-snippets';
+        $locale = apply_filters('plugin_locale', get_locale(), $domain);
+        load_textdomain(
+            $domain,
+            WP_LANG_DIR.'/'.$domain.'/'.$domain.'-'.$locale.'.mo'
+        );
+        load_plugin_textdomain(
+            $domain,
+            false,
+            dirname(plugin_basename(__FILE__)).'/lang/'
+        );
+    }
+
+    /**
+     * Fired when the plugin is uninstalled.
+     */
+    public function uninstall()
+    {
+		// Delete all snippets
+		delete_option('post_snippets_options');
+
+		// Delete any per user settings 
+		global $wpdb;
+		$wpdb->query(
+			"
+			DELETE FROM $wpdb->usermeta 
+			WHERE meta_key = 'post_snippets'
+			"
+		);
+	}
 
 	/**
 	 * Quick link to the Post Snippets Settings page from the Plugins page.
