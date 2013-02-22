@@ -2,10 +2,10 @@
 <phpunit 
 	colors="true" 
 	stopOnFailure="false" 
-	bootstrap="E:/Code/_Tools/UniformServer/www/wordpress.dev/wordpress-tests/init.php">
+	bootstrap="tests/bootstrap.php">
 	<testsuites>
-		<testsuite name="PostSnippets">
-			<file>post-snippets-test.php</file>
+		<testsuite name="complete">
+			<file>unittest</file>
 		</testsuite>
 	</testsuites>
 </phpunit>
