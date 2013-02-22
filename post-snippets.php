@@ -3,9 +3,10 @@
 Plugin Name: Post Snippets
 Plugin URI: http://wpstorm.net/wordpress-plugins/post-snippets/
 Description: Build a library with snippets of HTML, PHP code or reoccurring text that you often use in your posts. Variables to replace parts of the snippet on insert can be used. The snippets can be inserted as-is or as shortcodes.
-Version: 2.1
 Author: Johan Steen
 Author URI: http://johansteen.se/
+Version: 2.1
+License: GPLv2 or later
 Text Domain: post-snippets 
 
 Copyright 2009-2013 Johan Steen  (email : artstorm [at] gmail [dot] com)
