@@ -866,7 +866,5 @@ add_action('plugins_loaded', array('PostSnippets', 'getInstance'));
 function get_post_snippet($snippet_name, $snippet_vars = '')
 {
 	_deprecated_function(__FUNCTION__, '2.1', 'PostSnippets::getSnippet()');
-
-	// global $post_snippets;
 	return PostSnippets::getSnippet($snippet_name, $snippet_vars);
 }
