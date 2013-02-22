@@ -763,7 +763,7 @@ function edOpenPostSnippets(myField) {
 	 * @return	string
 	 *			The Snippet
 	 */
-	public function get_snippet( $snippet_name, $snippet_vars = '' )
+	public static function getSnippet( $snippet_name, $snippet_vars = '' )
 	{
 		$snippets = get_option( self::OPTION_DB_KEY );
 		for ($i = 0; $i < count($snippets); $i++) {
@@ -862,7 +862,10 @@ add_action('plugins_loaded', array('PostSnippets', 'getInstance'));
  * @return	string
  *			The Snippet
  */
-function get_post_snippet( $snippet_name, $snippet_vars = '' ) {
-	global $post_snippets;
-	return $post_snippets->get_snippet( $snippet_name, $snippet_vars );
+function get_post_snippet($snippet_name, $snippet_vars = '')
+{
+	_deprecated_function(__FUNCTION__, '2.1', 'PostSnippets::getSnippet()');
+
+	// global $post_snippets;
+	return PostSnippets::getSnippet($snippet_name, $snippet_vars);
 }

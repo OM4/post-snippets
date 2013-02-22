@@ -123,6 +123,10 @@ Contributions are appreciated and encouraged.
  * Variable default values now work correctly.
  * Allow other plugins or themes to disable the PHP Code execution feature using
    the new 'post_snippets_php_execution_enabled' filter.
+ * The function `get_post_snippet()` used to retrieve snippets from other
+   places in WordPress has been deprecated. Please update any code using this
+   function to use `PostSnippets::getSnippet()` instead, which replaces the old
+   function. `get_post_snippet()` will be removed in a future version.
  * Refactored code to comply with the PSR-0 standard.
  * Migrated to GitHub to maintain the code in development. 
    [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
@@ -380,3 +384,12 @@ Contributions are appreciated and encouraged.
 = 1.9 =
 Note that starting with this version and moving forward, at least PHP v5.2.4 is
 required to run Post Snippets.
+
+= 2.1 =
+The function `get_post_snippet()` used to retrieve snippets from other places in
+WordPress has been deprecated. Please update any code you might have modified
+that uses this function to use `PostSnippets::getSnippet()` instead, which 
+replaces the old function. `get_post_snippet()` will be removed in a future 
+version.
+
+This notice only affects a small number of users.

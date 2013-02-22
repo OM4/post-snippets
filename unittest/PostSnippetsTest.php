@@ -9,33 +9,17 @@ class PostSnippetsTest extends WP_UnitTestCase {
     public function setUp()
     {
         parent::setUp();
+
+		$snippets = array();
+		array_push($snippets, array(
+		    'title' => "TestTmp",
+		    'vars' => "",
+		    'description' => "",
+		    'shortcode' => false,
+		    'php' => false,
+		    'snippet' => "A test snippet..."));
+			update_option('post_snippets_options', $snippets);
     }
-
-	// protected	$post_snippets;
-	// public		$plugin_slug = 'post-snippets';
-
-	/**
-	 * setUp runs before each test to create a Fixture.
-	 *
-	 * The method should have protected access, but because WP_UnitTestCase
-	 * doesn't define it that way we'll stick with public.
-	 */
-	// public function setUp_old() {
-		// parent::setUp();
-		// $this->post_snippets = new Post_Snippets();
-		// global $post_snippets; $post_snippets = new Post_Snippets();
-
-		// $snippets = array();
-		// array_push($snippets, array(
-		//     'title' => "TestTmp",
-		//     'vars' => "",
-		//     'description' => "",
-		//     'shortcode' => false,
-		//     'php' => false,
-		//     'snippet' => "A test snippet..."));
-		// 	update_option('post_snippets_options', $snippets);
-	// }
-
 
 	// -------------------------------------------------------------------------
 	// Tests
