@@ -3,9 +3,10 @@
 	colors="true" 
 	stopOnFailure="false" 
 	bootstrap="unittest/bootstrap.php">
+    backupGlobals="false"
 	<testsuites>
 		<testsuite name="complete">
-			<file>unittest</file>
+            <directory>unittest</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
