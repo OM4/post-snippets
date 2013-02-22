@@ -78,7 +78,35 @@ class PostSnippets
         add_action('init', array($this, 'textDomain'));
         register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
 
-		$this->init_hooks();
+		// Add TinyMCE button
+		add_action('init', array(&$this, 'add_tinymce_button') );
+
+		// Settings link on plugins list
+		add_filter( 'plugin_action_links', array(&$this, 'plugin_action_links'), 10, 2 );
+		// Options Page
+		add_action( 'admin_menu', array(&$this,'wp_admin') );
+
+		$this->create_shortcodes();
+
+		// Adds the JS and HTML code in the header and footer for the jQuery
+		// insert UI dialog in the editor
+		add_action( 'admin_init', array(&$this,'enqueue_assets') );
+		add_action( 'admin_head', array(&$this,'jquery_ui_dialog') );
+		add_action( 'admin_footer', array(&$this,'add_jquery_ui_dialog') );
+		
+		// Add Editor QuickTag button:
+		// IF WordPress is 3.3 or higher, use the new refactored method to add
+		// the quicktag button.
+		// Start showing a deprecated message from version 1.9 of the plugin for
+		// the old method. And remove it completely when the plugin hits 2.0.
+		global $wp_version;
+		if ( version_compare($wp_version, '3.3', '>=') ) {
+			add_action( 'admin_print_footer_scripts', 
+						array(&$this,'add_quicktag_button'), 100 );
+		} else {
+			add_action( 'edit_form_advanced', array(&$this,'add_quicktag_button_pre33') );
+			add_action( 'edit_page_form', array(&$this,'add_quicktag_button_pre33') );
+		}
 	}
 
     /**
@@ -145,43 +173,6 @@ class PostSnippets
 			"
 		);
 	}
-
-	/**
-	 * Initializes the hooks for the plugin
-	 */
-	function init_hooks() {
-
-		// Add TinyMCE button
-		add_action('init', array(&$this, 'add_tinymce_button') );
-
-		// Settings link on plugins list
-		add_filter( 'plugin_action_links', array(&$this, 'plugin_action_links'), 10, 2 );
-		// Options Page
-		add_action( 'admin_menu', array(&$this,'wp_admin') );
-
-		$this->create_shortcodes();
-
-		// Adds the JS and HTML code in the header and footer for the jQuery
-		// insert UI dialog in the editor
-		add_action( 'admin_init', array(&$this,'enqueue_assets') );
-		add_action( 'admin_head', array(&$this,'jquery_ui_dialog') );
-		add_action( 'admin_footer', array(&$this,'add_jquery_ui_dialog') );
-		
-		// Add Editor QuickTag button:
-		// IF WordPress is 3.3 or higher, use the new refactored method to add
-		// the quicktag button.
-		// Start showing a deprecated message from version 1.9 of the plugin for
-		// the old method. And remove it completely when the plugin hits 2.0.
-		global $wp_version;
-		if ( version_compare($wp_version, '3.3', '>=') ) {
-			add_action( 'admin_print_footer_scripts', 
-						array(&$this,'add_quicktag_button'), 100 );
-		} else {
-			add_action( 'edit_form_advanced', array(&$this,'add_quicktag_button_pre33') );
-			add_action( 'edit_page_form', array(&$this,'add_quicktag_button_pre33') );
-		}
-	}
-
 
 	/**
 	 * Quick link to the Post Snippets Settings page from the Plugins page.
