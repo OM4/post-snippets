@@ -854,6 +854,7 @@ add_action('plugins_loaded', array('PostSnippets', 'getInstance'));
  * This function is a wrapper for Post_Snippets::get_snippet().
  *
  * @since	Post Snippets 1.6
+ * @deprecated Post Snippets 2.1
  *
  * @param	string		$snippet_name
  *			The name of the snippet to retrieve
