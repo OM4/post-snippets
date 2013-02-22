@@ -41,6 +41,8 @@ updating the snippet. PHP code is supported for snippets inserted as shortcodes.
   "Complete usage instructions")
 * [Support Forum](http://wordpress.org/tags/post-snippets?forum_id=10 
   "Use this for support and feature requests")
+* [GitHub](https://github.com/artstorm/post-snippets 
+  "Develop and contribute your code or report bugs")
 
 See the [Changelog](http://wordpress.org/extend/plugins/post-snippets/changelog/) 
 for what's new. Available [Translations](http://wpstorm.net/wordpress-plugins/post-snippets/#translations).
