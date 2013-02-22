@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /** Load all of the necessary class files for the plugin */
-// spl_autoload_register('PostSnippets::autoload');
+spl_autoload_register('PostSnippets::autoload');
 
 /**
  * Base Class.
@@ -59,8 +59,6 @@ class PostSnippets extends Post_Snippets_Base
     const MIN_PHP_VERSION  = '5.2.4';
     const MIN_WP_VERSION   = '3.0';
     const OPTION_DB_KEY    = 'post_snippets_options';
-
-
 
 	// Constants
 	const TINYMCE_PLUGIN_NAME = 'post_snippets';
@@ -95,6 +93,36 @@ class PostSnippets extends Post_Snippets_Base
 
 		$this->init_hooks();
 	}
+
+    /**
+     * PSR-0 compliant autoloader to load classes as needed.
+     *
+     * @since  2.1
+     *
+     * @param  string  $classname  The name of the class
+     * @return null    Return early if the class name does not start with the
+     *                 correct prefix
+     */
+    public static function autoload($className)
+    {
+        if ('PostSnippets' !== mb_substr($className, 0, 12)) {
+            return;
+        }
+        $className = ltrim($className, '\\');
+        $fileName  = '';
+        $namespace = '';
+        if ($lastNsPos = strrpos($className, '\\')) {
+            $namespace = substr($className, 0, $lastNsPos);
+            $className = substr($className, $lastNsPos + 1);
+            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+            $fileName .= DIRECTORY_SEPARATOR;
+        }
+        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, 'lib_'.$className);
+        $fileName .='.php';
+
+        require $fileName;
+    }
+
 
 	/**
 	 * Initializes the hooks for the plugin
