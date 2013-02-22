@@ -1,4 +1,4 @@
-﻿=== Post Snippets ===
+=== Post Snippets ===
 Contributors: artstorm
 Tags: post, admin, snippet, shortcode, html, custom, page, dynamic, editor, php, code
 Requires at least: 3.0
