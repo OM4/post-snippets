@@ -79,6 +79,8 @@ class PostSnippets
 		$rel_path = dirname(plugin_basename($this->get_File())).'/languages/';
 		load_plugin_textdomain(	'post-snippets', false, $rel_path );
 
+        register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
+
 		$this->init_hooks();
 	}
 
@@ -111,6 +113,23 @@ class PostSnippets
         require $fileName;
     }
 
+    /**
+     * Fired when the plugin is uninstalled.
+     */
+    public function uninstall()
+    {
+		// Delete all snippets
+		delete_option('post_snippets_options');
+
+		// Delete any per user settings 
+		global $wpdb;
+		$wpdb->query(
+			"
+			DELETE FROM $wpdb->usermeta 
+			WHERE meta_key = 'post_snippets'
+			"
+		);
+	}
 
 	/**
 	 * Initializes the hooks for the plugin
