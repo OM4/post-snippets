@@ -75,10 +75,7 @@ class PostSnippets
 		// See http://wordpress.org/extend/plugins/post-snippets/faq/ for more details.
 		self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
 
-		// Define the domain and path for translations
-		$rel_path = dirname(plugin_basename($this->get_File())).'/languages/';
-		load_plugin_textdomain(	'post-snippets', false, $rel_path );
-
+        add_action('init', array($this, 'textDomain'));
         register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
 
 		$this->init_hooks();
@@ -111,6 +108,24 @@ class PostSnippets
         $fileName .='.php';
 
         require $fileName;
+    }
+
+    /**
+     * Loads the text domain for translation
+     */
+    public function textDomain()
+    {
+        $domain = 'post-snippets';
+        $locale = apply_filters('plugin_locale', get_locale(), $domain);
+        load_textdomain(
+            $domain,
+            WP_LANG_DIR.'/'.$domain.'/'.$domain.'-'.$locale.'.mo'
+        );
+        load_plugin_textdomain(
+            $domain,
+            false,
+            dirname(plugin_basename(__FILE__)).'/lang/'
+        );
     }
 
     /**
