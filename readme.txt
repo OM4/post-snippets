@@ -123,6 +123,7 @@ Contributions are appreciated and encouraged.
  * Variable default values now work correctly.
  * Allow other plugins or themes to disable the PHP Code execution feature using
    the new `post_snippets_php_execution_enabled` filter.
+ * `PostSnippets::getSnippet()` now executes shortcodes within snippets.
  * The function `get_post_snippet()` used to retrieve snippets from other
    places in WordPress has been deprecated. Please update any code using this
    function to use `PostSnippets::getSnippet()` instead, which replaces the old

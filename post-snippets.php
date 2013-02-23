@@ -748,7 +748,7 @@ function edOpenPostSnippets(myField) {
 				}
 			}
 		}
-		return $snippet;
+		return do_shortcode($snippet);
 	}
 
 	public static function optionDBKey()
