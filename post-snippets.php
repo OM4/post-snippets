@@ -598,15 +598,14 @@ function edOpenPostSnippets(myField) {
 				if ( $snippet['shortcode'] && !empty($snippet['snippet']) ) {
 					
 					$vars = explode(",",$snippet['vars']);
-					$vars_str = '';
+					$vars_str = "";
 					foreach ($vars as $var) {
-						$vars_str = $vars_str . '"'.$var.'" => "",';
-						// $default_value = '';
-						// list($variable_name,$default_value) = explode('=', $var);
-						// $vars_str .= '"'.$variable_name.'" => "'.$default_value.'",';
+						$attribute = explode('=', $var);
+						$default_value = (count($attribute) > 1) ? $attribute[1] : '';
+						$vars_str .= "\"{$attribute[0]}\" => \"{$default_value}\",";
 					}
 
-					// Get the wptexturize setting
+					// Get the wptexturize setting 
 					$texturize = isset( $snippet["wptexturize"] ) ? $snippet["wptexturize"] : false;
 
 					add_shortcode($snippet['title'], create_function('$atts,$content=null', 
