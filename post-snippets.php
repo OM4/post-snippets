@@ -629,7 +629,7 @@ function edOpenPostSnippets(myField) {
 								// Handle PHP shortcodes
 								$php = "'. $snippet["php"] .'";
 								if ($php == true) {
-									$snippet = Post_Snippets::php_eval( $snippet );
+									$snippet = PostSnippets::php_eval( $snippet );
 								}
 
 								// Strip escaping and execute nested shortcodes
