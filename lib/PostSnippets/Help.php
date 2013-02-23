@@ -47,7 +47,7 @@ class PostSnippets_Help
 			'title'   => __( 'Shortcode', 'post-snippets' ),
 			'content' => $this->help_shortcode()
 		) );
-		if ( PostSnippets::$php_execution_enabled ) {
+		if ( PostSnippets::canExecutePHP() ) {
 			$screen->add_help_tab( array(
 				'id'      => 'php-plugin-help',
 				'title'   => __( 'PHP', 'post-snippets' ),

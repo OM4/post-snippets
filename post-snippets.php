@@ -44,8 +44,6 @@ class PostSnippets
     const OPTION_DB_KEY   = 'post_snippets_options';
     const USER_META_KEY   = 'post_snippets';
 
-	static $php_execution_enabled;
-
 	// Constants
 	const TINYMCE_PLUGIN_NAME = 'post_snippets';
 
@@ -70,10 +68,6 @@ class PostSnippets
         if (!$this->testHost()) {
             return;
         }
-
-		// Allow other plugins to disable the PHP Code execution feature.
-		// See http://wordpress.org/extend/plugins/post-snippets/faq/ for more details.
-		self::$php_execution_enabled = apply_filters('post_snippets_php_execution_enabled', true);
 
         add_action('init', array($this, 'textDomain'));
         register_uninstall_hook(__FILE__, array(__CLASS__, 'uninstall'));
@@ -663,7 +657,7 @@ function edOpenPostSnippets(myField) {
 	 */
 	public static function php_eval( $content )
 	{
-		if ( !self::$php_execution_enabled )
+		if ( !self::canExecutePHP() )
 			return $content;
 
 		$content = stripslashes($content);
@@ -766,6 +760,18 @@ function edOpenPostSnippets(myField) {
 	{
 		return self::USER_META_KEY;
 	}
+
+	/**
+	 * Allow other plugins to disable the PHP Code execution feature.
+	 *
+	 * @see   http://wordpress.org/extend/plugins/post-snippets/faq/
+	 * @since 2.1
+	 */
+	public static function canExecutePHP()
+	{
+		return apply_filters('post_snippets_php_execution_enabled', true);
+	}
+
 
     // -------------------------------------------------------------------------
     // Environment Checks

@@ -87,7 +87,7 @@ class PostSnippets_Admin
 					$new_snippets[$key]['vars'] = str_replace(' ', '', trim($_POST[$key.'_vars']) );
 					$new_snippets[$key]['shortcode'] = isset($_POST[$key.'_shortcode']) ? true : false;
 
-					if ( PostSnippets::$php_execution_enabled )
+					if ( PostSnippets::canExecutePHP() )
 						$new_snippets[$key]['php'] = isset($_POST[$key.'_php']) ? true : false;
 					else
 						$new_snippets[$key]['php'] = isset($snippets[$key]['php']) ? $snippets[$key]['php'] : false;
@@ -263,7 +263,7 @@ class PostSnippets_Admin
 
 			echo '<br/><strong>Shortcode Options:</strong><br/>';
 
-			if ( PostSnippets::$php_execution_enabled ) {
+			if ( PostSnippets::canExecutePHP() ) {
 				$this->checkbox(__('PHP Code', 'post-snippets'), $key.'_php',
 								$snippet['php']);
 			}
