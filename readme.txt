@@ -120,7 +120,8 @@ Contributions are appreciated and encouraged.
 == Changelog ==
 
 = Version 2.1 - 22 Feb 2013 =
- * Variable default values now work correctly.
+ * Default values are now respected as shortcode defaults and not only to
+   populate the insert window's fields.
  * Allow other plugins or themes to disable the PHP Code execution feature using
    the new `post_snippets_php_execution_enabled` filter.
  * `PostSnippets::getSnippet()` now executes shortcodes within snippets.
