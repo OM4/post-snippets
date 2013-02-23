@@ -180,7 +180,7 @@ class PostSnippets
 	 * @return	Array with all the plugin's action links
 	 */
 	function plugin_action_links( $links, $file ) {
-		if ( $file == plugin_basename( dirname($this->get_FILE()).'/post-snippets.php' ) ) {
+		if ( $file == plugin_basename( dirname(__FILE__).'/post-snippets.php' ) ) {
 			$links[] = '<a href="options-general.php?page=post-snippets/post-snippets.php">'.__('Settings', 'post-snippets').'</a>';
 		 }
 		return $links;
@@ -198,7 +198,7 @@ class PostSnippets
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 
 		# Adds the CSS stylesheet for the jQuery UI dialog
-		$style_url = plugins_url( '/assets/post-snippets.css', $this->get_FILE() );
+		$style_url = plugins_url( '/assets/post-snippets.css', __FILE__ );
 		wp_register_style( 'post-snippets', $style_url, false, '2.0' );
 		wp_enqueue_style( 'post-snippets' );
 	}
@@ -268,7 +268,7 @@ class PostSnippets
 	{
 		// Load the TinyMCE plugin, editor_plugin.js, into the array
 		$plugins[self::TINYMCE_PLUGIN_NAME] = 
-			plugins_url('/tinymce/editor_plugin.js?ver=1.9', $this->get_FILE());
+			plugins_url('/tinymce/editor_plugin.js?ver=1.9', __FILE__);
 
 		return $plugins;
 	}
@@ -686,13 +686,13 @@ function edOpenPostSnippets(myField) {
 	function wp_admin()	{
 		if ( current_user_can('manage_options') ) {
 			// If user can manage options, display the admin page
-			$option_page = add_options_page( 'Post Snippets Options', 'Post Snippets', 'administrator', $this->get_FILE(), array(&$this, 'options_page') );
+			$option_page = add_options_page( 'Post Snippets Options', 'Post Snippets', 'administrator', __FILE__, array(&$this, 'options_page') );
 			if ( $option_page and class_exists('PostSnippets_Help') ) {
 				$help = new PostSnippets_Help( $option_page );
 			}
 		} else {
 			// If user can't manage options, but can edit posts, display the overview page
-			$option_page = add_options_page( 'Post Snippets', 'Post Snippets', 'edit_posts', $this->get_FILE(), array(&$this, 'overview_page') );
+			$option_page = add_options_page( 'Post Snippets', 'Post Snippets', 'edit_posts', __FILE__, array(&$this, 'overview_page') );
 		}
 	}
 
@@ -725,31 +725,6 @@ function edOpenPostSnippets(myField) {
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
-
-	/**
-	 * Get __FILE__ with no symlinks.
-	 *
-	 * For development purposes mainly. Returns __FILE__ without resolved 
-	 * symlinks to be used when __FILE__ is needed while resolving symlinks
-	 * breaks WP functionaly, so the actual WordPress path is returned instead.
-	 * This makes it possible for all WordPress versions to point to the same
-	 * plugin folder for faster testing of the plugin in different WordPress
-	 * versions.
-	 *
-	 * @since	Post Snippets 1.9
-	 * @return	The __FILE__ constant without resolved symlinks.
-	 */
-	private function get_FILE()
-	{
-		$dev_path = 'D:\Dropbox\Code\WordPress';
-		$result = strpos( __FILE__, $dev_path );
-
-		if ( $result === false ) {
-			return __FILE__;
-		} else {
-			return str_replace($dev_path, WP_PLUGIN_DIR, __FILE__);
-		}
-	}
 
 	/**
 	 * Allow snippets to be retrieved directly from PHP.
