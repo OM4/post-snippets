@@ -1,9 +1,9 @@
-﻿=== Post Snippets ===
+=== Post Snippets ===
 Contributors: artstorm
 Tags: post, admin, snippet, shortcode, html, custom, page, dynamic, editor, php, code
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 2.0
+Tested up to: 3.5.1
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,8 @@ updating the snippet. PHP code is supported for snippets inserted as shortcodes.
   "Complete usage instructions")
 * [Support Forum](http://wordpress.org/tags/post-snippets?forum_id=10 
   "Use this for support and feature requests")
+* [GitHub](https://github.com/artstorm/post-snippets 
+  "Develop and contribute your code or report bugs")
 
 See the [Changelog](http://wordpress.org/extend/plugins/post-snippets/changelog/) 
 for what's new. Available [Translations](http://wpstorm.net/wordpress-plugins/post-snippets/#translations).
@@ -92,6 +94,13 @@ Please create an issue that conforms with [necolas's guidelines](https://github.
 Please visit the [Support Forum](http://wordpress.org/tags/post-snippets?forum_id=10 "Use this for support and feature requests") 
 for questions, answers, support and feature requests.
 
+= How can I disable the PHP Code Execution feature? =
+
+﻿To disable the "PHP Code" execution feature in this plugin, add the following code your theme's functions.php file:
+`add_filter('post_snippets_php_execution_enabled', '__return_false');`
+
+This is useful if you are using this plugin for client sites, and don't want your clients to be able to use PHP code in a post snippet.
+
 = How can I contribute to the plugin? =
 
 If you want to contribute improved code or new features for the plugin. Please
@@ -110,8 +119,20 @@ Contributions are appreciated and encouraged.
 
 == Changelog ==
 
-= Version X.X - XX XX 201X =
- * Migrated to GitHub to maintain the code in development. [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
+= Version 2.1 - 22 Feb 2013 =
+ * Default values are now respected as shortcode defaults and not only to
+   populate the insert window's fields.
+ * Allow other plugins or themes to disable the PHP Code execution feature using
+   the new `post_snippets_php_execution_enabled` filter.
+ * `PostSnippets::getSnippet()` now executes shortcodes within snippets.
+ * The function `get_post_snippet()` used to retrieve snippets from other
+   places in WordPress has been deprecated. Please update any code using this
+   function to use `PostSnippets::getSnippet()` instead, which replaces the old
+   function. `get_post_snippet()` will be removed in a future version. Most
+   users are not affected by this change.
+ * Refactored code to comply with the PSR-0 standard.
+ * Migrated to GitHub to maintain the code in development. 
+   [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
  * Included Polish translation (pl_PL) by Tomasz Wesołowski.
  * Included Slovak translation (sk_SK) by Branco Radenovich.
 
@@ -366,3 +387,12 @@ Contributions are appreciated and encouraged.
 = 1.9 =
 Note that starting with this version and moving forward, at least PHP v5.2.4 is
 required to run Post Snippets.
+
+= 2.1 =
+The function `get_post_snippet()` used to retrieve snippets from other places in
+WordPress has been deprecated. Please update any code you might have modified
+that uses this function to use `PostSnippets::getSnippet()` instead, which 
+replaces the old function. `get_post_snippet()` will be removed in a future 
+version.
+
+Most users are not affected by this change.
