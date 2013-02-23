@@ -126,7 +126,8 @@ Contributions are appreciated and encouraged.
  * The function `get_post_snippet()` used to retrieve snippets from other
    places in WordPress has been deprecated. Please update any code using this
    function to use `PostSnippets::getSnippet()` instead, which replaces the old
-   function. `get_post_snippet()` will be removed in a future version.
+   function. `get_post_snippet()` will be removed in a future version. Most
+   users are not affected by this change.
  * Refactored code to comply with the PSR-0 standard.
  * Migrated to GitHub to maintain the code in development. 
    [Post Snippets at GitHub](https://github.com/artstorm/post-snippets).
@@ -392,4 +393,4 @@ that uses this function to use `PostSnippets::getSnippet()` instead, which
 replaces the old function. `get_post_snippet()` will be removed in a future 
 version.
 
-This notice only affects a small number of users.
+Most users are not affected by this change.
