@@ -20,7 +20,7 @@ class PostSnippets_View
         ($data) ? extract($data) : null;
  
         ob_start();
-        include ($filePath);
+        include ($file);
         $view = ob_get_contents();
         ob_end_clean();
 
