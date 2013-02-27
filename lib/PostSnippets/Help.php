@@ -205,7 +205,7 @@ class PostSnippets_Help
 	public function help_advanced()
 	{
 		return '<p>'.
-		__('You can retrieve a Post Snippet directly from PHP, in a theme for instance, by using the get_post_snippet() function.', 'post-snippets').
+		__('You can retrieve a Post Snippet directly from PHP, in a theme for instance, by using the PostSnippets::getSnippet() method.', 'post-snippets').
 		'</p>
 
 		<h2>'.
@@ -213,7 +213,7 @@ class PostSnippets_Help
 		'</h2>
 		<p>'.
 		'<code>
-		&lt;?php $my_snippet = get_post_snippet( $snippet_name, $snippet_vars ); ?&gt;
+		&lt;?php $my_snippet = PostSnippets::getSnippet( $snippet_name, $snippet_vars ); ?&gt;
 		</code></p>
 
 		<h2>'.
@@ -234,7 +234,7 @@ class PostSnippets_Help
 		'</h2>
 		<p><code>
 		&lt;?php<br/>
-			$my_snippet = get_post_snippet( \'internal-link\', \'title=Awesome&url=2011/02/awesome/\' );<br/>
+			$my_snippet = PostSnippets::getSnippet( \'internal-link\', \'title=Awesome&url=2011/02/awesome/\' );<br/>
 			echo $my_snippet;<br/>
 		?&gt;
 		</code></p>';
